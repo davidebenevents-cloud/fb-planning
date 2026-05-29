@@ -1,0 +1,225 @@
+<!doctype html>
+<html lang="it">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>F&B Workforce Control</title>
+    <link rel="stylesheet" href="styles.css" />
+  </head>
+  <body>
+    <div class="app-shell">
+      <aside class="sidebar" aria-label="Navigazione principale">
+        <div class="brand">
+          <div class="brand-mark">FW</div>
+          <div>
+            <strong>F&B Control</strong>
+            <span>Workforce F&B</span>
+          </div>
+        </div>
+
+        <nav class="nav-list">
+          <button class="nav-item active" data-section="planning" type="button">Planning</button>
+          <button class="nav-item" data-section="resources" type="button">Risorse</button>
+          <button class="nav-item" type="button">Presenze</button>
+          <button class="nav-item" type="button">Autorizzazioni</button>
+          <button class="nav-item" type="button">Costo lavoro</button>
+          <button class="nav-item" type="button">Report</button>
+        </nav>
+
+        <section class="sidebar-panel">
+          <span class="panel-label">Settimana</span>
+          <strong>18 - 24 maggio</strong>
+          <p>Budget costo lavoro: <b>€ 27.500</b></p>
+        </section>
+      </aside>
+
+      <main class="workspace">
+        <header class="topbar">
+          <div>
+            <p class="eyebrow">Gruppo Immobiliare Delta S.p.A.</p>
+            <h1>Planning operativo F&B</h1>
+          </div>
+          <div class="topbar-actions">
+            <select id="propertyFilter" aria-label="Filtra per struttura">
+              <option value="all">Hotel Artemide S.r.l.</option>
+            </select>
+            <button class="ghost-button" id="saveTemplateBtn" type="button">Salva modello</button>
+            <button class="primary-button" id="applyTemplateBtn" type="button">Duplica settimana</button>
+          </div>
+        </header>
+
+        <section class="metrics-grid" aria-label="Indicatori principali">
+          <article class="metric">
+            <span>Ore pianificate</span>
+            <strong id="plannedHours">0</strong>
+            <small>vs 1.120 ore budget</small>
+          </article>
+          <article class="metric">
+            <span>Costo previsto</span>
+            <strong id="plannedCost">€ 0</strong>
+            <small id="costDelta">0% vs budget</small>
+          </article>
+          <article class="metric">
+            <span>Copertura servizi</span>
+            <strong id="coverageScore">0%</strong>
+            <small>colazione, pranzo, cena</small>
+          </article>
+          <article class="metric warning">
+            <span>Anomalie aperte</span>
+            <strong id="issueCount">0</strong>
+            <small>scoperture, extra ore, assenze</small>
+          </article>
+        </section>
+
+        <section class="control-strip" aria-label="Controlli planning">
+          
+          <div class="template-picker">
+            <label for="templateSelect">Modello</label>
+            <select id="templateSelect">
+              <option value="standard">Settimana standard F&B</option>
+              <option value="banquet">Settimana eventi e banqueting</option>
+              <option value="low">Bassa occupazione</option>
+            </select>
+          </div>
+          <button class="ghost-button compact" id="autoPlanBtn" type="button">Genera planning</button>
+          <button class="ghost-button compact" id="addShiftBtn" type="button">+ Turno</button>
+        </section>
+
+        <div id="planningSection" class="app-section active-section"><div class="content-grid">
+          <section class="planning-surface" aria-label="Planning settimanale">
+            <div class="planning-header">
+              <div class="calendar-toolbar">
+                <button class="ghost-button compact" id="prevWeekBtn" type="button">← Settimana</button>
+
+                <div class="calendar-title-wrap">
+                  <h2 id="planningTitle">Vista per risorsa</h2>
+                  <span id="planningSubtitle">Turni, servizi e costi per persona</span>
+                  <span id="currentWeekLabel"></span>
+                </div>
+
+                <button class="ghost-button compact" id="nextWeekBtn" type="button">Settimana →</button>
+              </div>
+            </div>
+            <div class="week-grid" id="weekGrid"></div>
+          </section>
+
+          <aside class="insight-panel" aria-label="Insight operativi">
+            <section>
+              <h2>Controllo immediato</h2>
+              <div class="insight-list" id="insightList"></div>
+            </section>
+
+            <section>
+              <h2>Autorizzazioni</h2>
+              <div class="approval-list" id="approvalList"></div>
+            </section>
+
+            <section>
+              <h2>Modelli salvati</h2>
+              <div class="template-list" id="templateList"></div>
+            </section>
+          </aside>
+        </div>
+      </div>
+
+      <div id="resourcesSection" class="app-section">
+        <section class="resource-management">
+          <div class="resource-header">
+            <h2>Gestione Risorse</h2><input id="resourceSearch" placeholder="Cerca risorsa..." /><select id="resourceDepartmentFilter"><option value="">Tutti i reparti</option><option>Sala Bar</option><option>Cucina</option><option>Colazioni</option></select>
+            <button class="primary-button" id="saveResourceBtn">
+              Salva risorsa
+            </button>
+          </div>
+
+          <div class="resource-form-grid">
+            <input type="text" id="resourceName" placeholder="Nome risorsa" />
+
+            <select id="resourceRole">
+<option>Head Waiter</option>
+<option>Breakfast Coordinator</option>
+<option>Chef de Rang</option>
+<option>Add.tta prenotaz. acc.za</option>
+<option>Senior Waiter</option>
+<option>Capo cuoco partita</option>
+<option>Cameriere di sala</option>
+<option>Waiter</option>
+<option>Add.tto serv. tavoli</option>
+<option>Bartender</option>
+<option>Cuoco</option>
+<option>Commis di cucina</option>
+<option>Add.tta al buffet e sala</option>
+<option>Add.tta di cucina</option>
+<option>Add.tta al banco bar e sala</option>
+<option>Barback</option>
+<option>Lavapiatti</option>
+</select>
+
+            <select id="resourceDepartment">
+<option>Sala Bar</option>
+<option>Cucina</option>
+<option>Colazioni</option>
+</select>
+
+            <input type="number" id="resourceRate" placeholder="Costo orario" />
+
+            <input type="number" id="resourceHours" placeholder="Ore massime" />
+
+            <input type="color" id="resourceColor" value="#0f766e" />
+          </div>
+
+          <div id="resourceList" class="resource-list"></div>
+        </section>
+      </div>
+      </main>
+    </div>
+
+    <dialog id="shiftDialog">
+      <form method="dialog" class="dialog-card">
+        <header>
+          <h2>Nuovo turno</h2>
+          <button class="icon-button" value="cancel" aria-label="Chiudi" type="submit">×</button>
+        </header>
+        <label>
+          Risorsa
+          <select id="resourceInput"></select>
+        </label>
+        <label>
+          Giorno
+          <select id="dayInput"></select>
+        </label>
+        <label>
+          Reparto
+          <select id="departmentInput"></select>
+        </label>
+        
+        <div class="time-row">
+          <label>
+            Inizio
+            <input id="startInput" type="time" value="12:00" />
+          </label>
+          <label>
+            Fine
+            <input id="endInput" type="time" value="16:00" />
+          </label>
+        </div>
+        <menu>
+          <button class="ghost-button" value="cancel" type="submit">Annulla</button>
+          <button class="primary-button" id="confirmShiftBtn" value="default" type="button">Aggiungi</button>
+        </menu>
+      </form>
+    </dialog>
+
+    <div class="toast" id="toast" role="status" aria-live="polite"></div>
+
+    <script src="app.js"></script>
+  
+<div id="editModal" class="edit-modal" style="display:none">
+ <div class="edit-modal-content">
+  <h3>Modifica risorsa</h3>
+  <p>Seleziona la risorsa e modifica i dati nel form, poi salva.</p>
+  <button onclick="document.getElementById('editModal').style.display='none'">Chiudi</button>
+ </div>
+</div>
+
+</body>
+</html>
