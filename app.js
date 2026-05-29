@@ -901,3 +901,30 @@ function refreshResourceSelect(){
 }
 document.querySelector("#departmentInput")?.addEventListener("change",refreshResourceSelect);
 setTimeout(refreshResourceSelect,100);
+
+document.getElementById('importResourcesBtn')?.addEventListener('click',()=>document.getElementById('excelImport').click());
+document.getElementById('excelImport')?.addEventListener('change',(e)=>{
+ const f=e.target.files[0]; if(!f) return;
+ const reader=new FileReader();
+ reader.onload=()=>{
+  const text=reader.result;
+  const lines=text.split(/\r?\n/).filter(x=>x.trim());
+  let added=0;
+  for(let i=1;i<lines.length;i++){
+    const c=lines[i].split(';').length>1?lines[i].split(';'):lines[i].split(',');
+    if(c.length<4) continue;
+    const name=(c[0]+' '+(c[1]||'')).trim();
+    const role=(c[2]||'').trim();
+    let dep=(c[3]||'').trim();
+    if(dep.toUpperCase().includes('SALA')) dep='Sala Bar';
+    else if(dep.toUpperCase().includes('CUCINA')) dep='Cucina';
+    else dep='Colazioni';
+    resources.push({name:name,role:role,department:dep,rate:parseFloat(c[4]||0)||0});
+    added++;
+  }
+  saveResources();
+  if(typeof renderResources==='function') renderResources();
+  alert('Importate '+added+' risorse');
+ };
+ reader.readAsText(f);
+});
